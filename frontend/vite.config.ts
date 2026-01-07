@@ -5,6 +5,7 @@
 
   export default defineConfig({
     plugins: [react()],
+    base: "/",   // 🔴 REQUIRED for Netlify
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
       alias: {
@@ -13,7 +14,7 @@
     },
     build: {
       target: 'esnext',
-      outDir: 'build',
+      outDir: 'dist',  // Changed from 'build' to 'dist' for Netlify
     },
     server: {
       port: 5173,
