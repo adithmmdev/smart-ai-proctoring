@@ -6,24 +6,16 @@ const connectDatabase = require('./config/db');
 dotenv.config({path: path.join(__dirname, 'config', 'config.env')})
 connectDatabase();
 const cors = require("cors");
-// Allow common local dev ports (5173 = default Vite, 5174+ fallback)
-const allowedOrigins = [
-  "http://localhost:5173",
-  "http://localhost:5174",
-  "http://127.0.0.1:5173",
-  "http://127.0.0.1:5174",
-];
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      // Allow same-origin/non-browser requests (like curl/Postman with no origin)
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) return callback(null, true);
-      return callback(new Error(`CORS blocked: ${origin}`));
-    },
-    credentials: true,
-  })
-);
+
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "https://musical-blancmange-a5e37c.netlify.app"
+  ],
+  credentials: true
+}));
+
+app.options("*", cors()); // IMPORTANT
 
 // Increase body size limit to handle large base64 images (50MB limit)
 app.use(express.json({ limit: '50mb' }));
