@@ -1,0 +1,18 @@
+# Environment variables
+*.env
+backend/config/config.env
+
+# Node dependencies
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+
+# Build outputs
+frontend/dist/
+frontend/build/
+
+# Vite cache
+frontend/node_modules/.vite/
+
+# Logs
+*.log
