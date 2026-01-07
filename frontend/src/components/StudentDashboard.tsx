@@ -76,7 +76,7 @@ export function StudentDashboard() {
         }
 
         // Fetch student profile
-        const profileResponse = await fetch('http://localhost:3000/api/v1/auth/me', {
+        const profileResponse = await fetch('https://smart-ai-proctoring.onrender.com/api/v1/auth/me', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -94,7 +94,7 @@ export function StudentDashboard() {
             }
 
         // Fetch dashboard stats
-        const dashboardResponse = await fetch('http://localhost:3000/api/v1/student/dashboard', {
+        const dashboardResponse = await fetch('https://smart-ai-proctoring.onrender.com/api/v1/student/dashboard', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

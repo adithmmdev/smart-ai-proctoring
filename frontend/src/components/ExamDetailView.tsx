@@ -58,7 +58,7 @@ export default function ExamDetailView({ exam, onBack }: ExamDetailViewProps) {
         }
 
         const examId = exam._id || exam.id;
-        const response = await fetch(`http://localhost:3000/api/v1/exam/details/${examId}`, {
+        const response = await fetch(`https://smart-ai-proctoring.onrender.com/api/v1/exam/details/${examId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

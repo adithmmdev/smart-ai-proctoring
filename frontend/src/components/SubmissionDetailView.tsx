@@ -49,7 +49,7 @@ export default function SubmissionDetailView({ submission, onBack }: SubmissionD
         }
 
         const submissionId = submission.id || submission._id;
-        const response = await fetch(`http://localhost:3000/api/v1/submission/details/${submissionId}`, {
+        const response = await fetch(`https://smart-ai-proctoring.onrender.com/api/v1/submission/details/${submissionId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

@@ -82,7 +82,7 @@ export function AdminDashboard() {
           return;
         }
 
-        const response = await fetch('http://localhost:3000/api/v1/report/overview', {
+        const response = await fetch('https://smart-ai-proctoring.onrender.com/api/v1/report/overview', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -135,7 +135,7 @@ export function AdminDashboard() {
           return;
         }
 
-        const response = await fetch('http://localhost:3000/api/v1/exam/get', {
+        const response = await fetch('https://smart-ai-proctoring.onrender.com/api/v1/exam/get', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -240,7 +240,7 @@ export function AdminDashboard() {
           return;
         }
 
-        const response = await fetch('http://localhost:3000/api/v1/report/activities', {
+        const response = await fetch('https://smart-ai-proctoring.onrender.com/api/v1/report/activities', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -286,7 +286,7 @@ export function AdminDashboard() {
           return;
         }
 
-        const response = await fetch('http://localhost:3000/api/v1/submission/admin/all', {
+        const response = await fetch('https://smart-ai-proctoring.onrender.com/api/v1/submission/admin/all', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

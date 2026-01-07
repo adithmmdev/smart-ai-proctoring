@@ -36,7 +36,7 @@ export default function App() {
 
       let response;
       try {
-        response = await fetch('http://localhost:3000/api/v1/auth/login', {
+        response = await fetch('https://smart-ai-proctoring.onrender.com/api/v1/auth/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -110,7 +110,7 @@ export default function App() {
 
       let response;
       try {
-        response = await fetch('http://localhost:3000/api/v1/auth/register', {
+        response = await fetch('https://smart-ai-proctoring.onrender.com/api/v1/auth/register', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

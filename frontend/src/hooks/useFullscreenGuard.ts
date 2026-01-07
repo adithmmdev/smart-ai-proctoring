@@ -99,7 +99,7 @@ export function useFullscreenGuard({
 
       // Try both API endpoints
       try {
-        await axios.post('http://localhost:3000/api/v1/proctor/flag', flagData, {
+        await axios.post('https://smart-ai-proctoring.onrender.com/api/v1/proctor/flag', flagData, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
@@ -108,7 +108,7 @@ export function useFullscreenGuard({
       } catch (err) {
         // Fallback to alternative endpoint
         try {
-          await axios.post('http://localhost:3000/api/proctoring/flag', flagData, {
+          await axios.post('https://smart-ai-proctoring.onrender.com/api/proctoring/flag', flagData, {
             headers: {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${token}`,

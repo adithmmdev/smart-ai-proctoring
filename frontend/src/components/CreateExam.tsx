@@ -256,7 +256,7 @@ export default function CreateExam({ onBack, onSuccess }: CreateExamProps) {
         }
       };
 
-      const response = await axios.post('http://localhost:3000/api/v1/exam', examData, {
+      const response = await axios.post('https://smart-ai-proctoring.onrender.com/api/v1/exam', examData, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`

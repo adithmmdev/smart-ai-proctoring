@@ -170,7 +170,7 @@ export function ExamWindow({ examData, onExitExam }: ExamWindowProps) {
 
         console.log('Fetching exam details for ID:', examId);
 
-        const response = await fetch(`http://localhost:3000/api/v1/exam/get/${examId}`, {
+        const response = await fetch(`https://smart-ai-proctoring.onrender.com/api/v1/exam/get/${examId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -271,7 +271,7 @@ export function ExamWindow({ examData, onExitExam }: ExamWindowProps) {
         // Check for paused submission and load saved answers
         try {
           const examId = examData.examId || examData.id;
-          const submissionResponse = await fetch(`http://localhost:3000/api/v1/submission/${examId}`, {
+          const submissionResponse = await fetch(`https://smart-ai-proctoring.onrender.com/api/v1/submission/${examId}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -630,7 +630,7 @@ export function ExamWindow({ examData, onExitExam }: ExamWindowProps) {
       }
 
       // Get student ID from token or user profile
-      const userProfileResponse = await fetch('http://localhost:3000/api/v1/auth/me', {
+      const userProfileResponse = await fetch('https://smart-ai-proctoring.onrender.com/api/v1/auth/me', {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -654,7 +654,7 @@ export function ExamWindow({ examData, onExitExam }: ExamWindowProps) {
       };
 
       // Send to backend
-      const response = await axios.post("http://localhost:3000/api/v1/proctor/flag", flagData, {
+      const response = await axios.post("https://smart-ai-proctoring.onrender.com/api/v1/proctor/flag", flagData, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
@@ -1834,7 +1834,7 @@ export function ExamWindow({ examData, onExitExam }: ExamWindowProps) {
         maxAllowed: maxAllowedViolations
       });
 
-      const response = await fetch(`http://localhost:3000/api/v1/submission/${examId}`, {
+      const response = await fetch(`https://smart-ai-proctoring.onrender.com/api/v1/submission/${examId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -1908,7 +1908,7 @@ export function ExamWindow({ examData, onExitExam }: ExamWindowProps) {
         answeredCount: formattedAnswers.length
       });
 
-      const response = await fetch(`http://localhost:3000/api/v1/submission/${examId}`, {
+      const response = await fetch(`https://smart-ai-proctoring.onrender.com/api/v1/submission/${examId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -1976,7 +1976,7 @@ export function ExamWindow({ examData, onExitExam }: ExamWindowProps) {
 
       // Save progress to backend using the submission endpoint
       // The backend should handle this as a paused/incomplete submission
-      const response = await fetch(`http://localhost:3000/api/v1/submission/${examId}`, {
+      const response = await fetch(`https://smart-ai-proctoring.onrender.com/api/v1/submission/${examId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

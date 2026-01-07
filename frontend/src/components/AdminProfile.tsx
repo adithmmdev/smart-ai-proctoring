@@ -108,7 +108,7 @@ export function AdminProfile({ onBack }: AdminProfileProps) {
         return;
       }
 
-      const response = await axios.get("http://localhost:3000/api/v1/admin/profile", {
+      const response = await axios.get("https://smart-ai-proctoring.onrender.com/api/v1/admin/profile", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -138,7 +138,7 @@ export function AdminProfile({ onBack }: AdminProfileProps) {
       const token = localStorage.getItem("token");
       if (!token) return;
 
-      const response = await axios.get("http://localhost:3000/api/v1/admin/stats", {
+      const response = await axios.get("https://smart-ai-proctoring.onrender.com/api/v1/admin/stats", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -159,7 +159,7 @@ export function AdminProfile({ onBack }: AdminProfileProps) {
       }
 
       const response = await axios.put(
-        "http://localhost:3000/api/v1/admin/profile",
+        "https://smart-ai-proctoring.onrender.com/api/v1/admin/profile",
         editForm,
         {
           headers: {
@@ -196,7 +196,7 @@ export function AdminProfile({ onBack }: AdminProfileProps) {
       }
 
       await axios.put(
-        "http://localhost:3000/api/v1/admin/update-password",
+        "https://smart-ai-proctoring.onrender.com/api/v1/admin/update-password",
         {
           currentPassword: passwordForm.currentPassword,
           newPassword: passwordForm.newPassword,
@@ -276,7 +276,7 @@ export function AdminProfile({ onBack }: AdminProfileProps) {
           console.log("Base64 preview:", base64String.substring(0, 50) + "...");
 
           const response = await axios.post(
-            "http://localhost:3000/api/v1/admin/upload-avatar",
+            "https://smart-ai-proctoring.onrender.com/api/v1/admin/upload-avatar",
             { avatar: base64String },
             {
               headers: {
