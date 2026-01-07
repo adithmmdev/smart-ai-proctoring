@@ -12,6 +12,7 @@ app.use(cors({
     "http://localhost:5173",
     "https://musical-blancmange-a5e37c.netlify.app"
   ],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   credentials: true
 }));
 
