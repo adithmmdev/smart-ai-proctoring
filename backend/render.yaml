@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: proctoring-backend
+    env: node
+    region: oregon
+    buildCommand: "npm install"
+    startCommand: "node app.js"
+    envVars:
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+      - key: PORT
+        value: "3000"
+
