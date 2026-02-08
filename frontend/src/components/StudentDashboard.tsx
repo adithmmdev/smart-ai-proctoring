@@ -35,6 +35,7 @@ import {
   Ban,
 } from "lucide-react";
 import { ExamWindow } from "./ExamWindow";
+import { Skeleton } from "./ui/skeleton";
 
 export function StudentDashboard() {
   const [activeView, setActiveView] = useState("dashboard");
@@ -339,8 +340,18 @@ export function StudentDashboard() {
               )}
               
               {loading && (
-                <div className="text-center py-8">
-                  <p className="text-gray-600">Loading dashboard data...</p>
+                <div className="py-6 space-y-4" aria-hidden="true">
+                  <div className="grid grid-cols-4 gap-4">
+                    {[...Array(4)].map((_, idx) => (
+                      <Card key={idx}>
+                        <CardContent className="pt-6 space-y-3">
+                          <Skeleton className="h-4 w-24" />
+                          <Skeleton className="h-6 w-16" />
+                          <Skeleton className="h-3 w-32" />
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
                 </div>
               )}
 

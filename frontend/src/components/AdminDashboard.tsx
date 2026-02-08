@@ -43,6 +43,7 @@ import ExamDetailView from "./ExamDetailView";
 import SubmissionDetailView from "./SubmissionDetailView";
 import CreateExam from "./CreateExam";
 import { AdminProfile } from "./AdminProfile";
+import { Skeleton } from "./ui/skeleton";
 
 export function AdminDashboard() {
   const [activeView, setActiveView] = useState("overview");
@@ -567,8 +568,18 @@ export function AdminDashboard() {
               )}
               
               {loading && (
-                <div className="text-center py-8">
-                  <p className="text-gray-600">Loading overview statistics...</p>
+                <div className="py-6 space-y-4">
+                  <div className="grid grid-cols-4 gap-4" aria-hidden="true">
+                    {[...Array(4)].map((_, idx) => (
+                      <Card key={idx}>
+                        <CardContent className="pt-6 space-y-3">
+                          <Skeleton className="h-4 w-24" />
+                          <Skeleton className="h-6 w-16" />
+                          <Skeleton className="h-3 w-32" />
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
                 </div>
               )}
 

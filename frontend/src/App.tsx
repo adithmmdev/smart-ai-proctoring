@@ -1,15 +1,34 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs';
 import { Button } from './components/ui/button';
 import { Input } from './components/ui/input';
 import { Label } from './components/ui/label';
 import { Brain, Shield, User, Lock, Mail } from 'lucide-react';
-import { Toaster } from 'sonner';
+import { Toaster, toast } from 'sonner';
+import { motion } from 'framer-motion';
 import { AdminDashboard } from './components/AdminDashboard';
 import { StudentDashboard } from './components/StudentDashboard';
+import { Skeleton } from './components/ui/skeleton';
+import { ProctoringStatusIndicator } from './components/ProctoringStatusIndicator';
+
+const techLogos = [
+  {
+    alt: 'AI icon',
+    src: 'https://img.icons8.com/?size=100&id=114433&format=png&color=000000',
+  },
+  {
+    alt: 'Shield security icon',
+    src: 'https://img.icons8.com/?size=100&id=8146&format=png&color=000000',
+  },
+  {
+    alt: 'Cloud server icon',
+    src: 'https://img.icons8.com/?size=100&id=41401&format=png&color=000000',
+  },
+];
 
 export default function App() {
+
   const [activeTab, setActiveTab] = useState('student');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userType, setUserType] = useState('');
@@ -20,6 +39,52 @@ export default function App() {
   const [error, setError] = useState('');
   const [showRegister, setShowRegister] = useState(false);
   const [name, setName] = useState('');
+  const [visitCount, setVisitCount] = useState<number | null>(null);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [proctorStatus] = useState<'normal' | 'warning' | 'suspicious'>('normal');
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    try {
+      const raw = localStorage.getItem('landingVisitCount');
+      const previous = raw ? parseInt(raw, 10) || 0 : 0;
+      const next = previous + 1;
+      localStorage.setItem('landingVisitCount', String(next));
+      setVisitCount(next);
+    } catch (err) {
+      console.error('Error updating visit count:', err);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const stored = window.localStorage.getItem('theme');
+    if (stored === 'light' || stored === 'dark') {
+      setTheme(stored);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    window.localStorage.setItem('theme', theme);
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+  }, [theme]);
+
+  const toggleTheme = useCallback(() => {
+    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+  }, []);
+
+  const ThemeToggleButton = () => (
+    <button
+      type="button"
+      onClick={toggleTheme}
+      aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
+      className="fixed top-4 right-4 z-50 rounded-full border border-gray-200 bg-white/80 px-3 py-1 text-xs font-medium text-gray-700 shadow-sm backdrop-blur-sm hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+    >
+      {theme === 'light' ? 'Dark mode' : 'Light mode'}
+    </button>
+  );
 
   const handleLogin = async (type: string) => {
     try {
@@ -89,10 +154,12 @@ export default function App() {
       setUserType(data.role);
       setIsLoggedIn(true);
       setLoading(false);
+      toast.success(`Logged in successfully as ${data.role === 'admin' ? 'Admin' : 'Student'}`);
     } catch (err: any) {
       console.error('Login error:', err);
       setError(err.message || 'Login failed. Please check your credentials and try again.');
       setLoading(false);
+      toast.error(err.message || 'Login failed. Please check your credentials and try again.');
     }
   };
 
@@ -155,16 +222,19 @@ export default function App() {
       setIsLoggedIn(true);
       setLoading(false);
       setShowRegister(false);
+      toast.success(`Account created successfully as ${data.role === 'admin' ? 'Admin' : 'Student'}`);
     } catch (err: any) {
       console.error('Registration error:', err);
       setError(err.message || 'Registration failed. Please try again.');
       setLoading(false);
+      toast.error(err.message || 'Registration failed. Please try again.');
     }
   };
 
   if (isLoggedIn && userType === 'admin') {
     return (
       <>
+        <ThemeToggleButton />
         <AdminDashboard />
         <Toaster position="top-right" richColors />
       </>
@@ -174,6 +244,7 @@ export default function App() {
   if (isLoggedIn && userType === 'student') {
     return (
       <>
+        <ThemeToggleButton />
         <StudentDashboard />
         <Toaster position="top-right" richColors />
       </>
@@ -181,15 +252,22 @@ export default function App() {
   }
 
   return (
-    <div className="h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 relative">
+    <div className="h-screen relative animated-bg">
+      <ThemeToggleButton />
       <div className="absolute inset-0">
         <div className="absolute top-0 right-0 w-96 h-96 rounded-full bg-gradient-to-br from-blue-300/15 to-purple-300/15 blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 rounded-full bg-gradient-to-tr from-indigo-300/15 to-cyan-300/15 blur-3xl"></div>
       </div>
 
       <div className="relative z-10 h-screen flex items-center justify-center">
-        <Card className="w-96 shadow-2xl bg-white/90 backdrop-blur-sm">
-          <CardHeader className="text-center space-y-4 pb-6">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+          aria-label="Login card"
+        >
+          <Card className="w-96 shadow-2xl bg-white/90 backdrop-blur-sm">
+          <CardHeader className="text-center space-y-4 pb-6 main-title-shadow-wrapper">
             <div className="mx-auto w-16 h-16 rounded-2xl flex items-center justify-center" style={{ backgroundColor: '#4444FF' }}>
               <Brain className="w-8 h-8 text-white" />
             </div>
@@ -199,9 +277,45 @@ export default function App() {
             <CardDescription className="text-gray-600">
               Secure, Smart, Reliable Exams
             </CardDescription>
+            {visitCount !== null && (
+              <p className="mt-2 inline-flex items-center justify-center rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-[11px] font-medium text-blue-700 shadow-xs">
+                Welcome! You have visited this page {visitCount}{' '}
+                {visitCount === 1 ? 'time' : 'times'}.
+              </p>
+            )}
+            <div className="mt-2 flex justify-center gap-3">
+              {techLogos.map((logo) => (
+                <img
+                  key={logo.alt}
+                  src={logo.src}
+                  alt={logo.alt}
+                  loading="lazy"
+                  className="h-6 w-6 rounded-full shadow-xs"
+                />
+              ))}
+            </div>
+            <div className="mt-3 flex justify-center">
+              <ProctoringStatusIndicator status={proctorStatus} />
+            </div>
           </CardHeader>
 
           <CardContent className="space-y-6">
+            {loading && (
+              <div className="space-y-4" aria-hidden="true">
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-24 mx-auto" />
+                  <Skeleton className="h-10 w-full" />
+                </div>
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-24 mx-auto" />
+                  <Skeleton className="h-10 w-full" />
+                </div>
+                <Skeleton className="h-4 w-28 ml-auto" />
+                <Skeleton className="h-10 w-full" />
+                <Skeleton className="h-4 w-40 mx-auto" />
+              </div>
+            )}
+            {!loading && (
             <Tabs value={activeTab} onValueChange={setActiveTab}>
               <TabsList className="grid w-full grid-cols-2 mb-6">
                 <TabsTrigger value="student">
@@ -396,9 +510,19 @@ export default function App() {
                 )}
               </TabsContent>
             </Tabs>
+            )}
           </CardContent>
-        </Card>
+          </Card>
+        </motion.div>
       </div>
+      <Toaster position="top-right" richColors />
+    </div>
+  );
+  /* NEW CHANGE */
+  return (
+    <div className="animated-bg">
+      {/* existing routes/components stay SAME */}
     </div>
   );
 }
+
