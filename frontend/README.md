@@ -1,11 +1,28 @@
+# Smart AI Proctoring — Frontend
 
-  # Modern Responsive Login Page (Copy)
+React + TypeScript frontend for the Smart AI Proctoring System.
 
-  This is a code bundle for Modern Responsive Login Page (Copy). The original project is available at https://www.figma.com/design/52wyhuyb63G8mBTrGDN3qC/Modern-Responsive-Login-Page--Copy-.
+## Responsibilities
 
-  ## Running the code
+- Student and administrator authentication flows
+- Exam dashboards and submission workflows
+- Browser-side proctoring signals using MediaPipe/TensorFlow tooling
+- Proctoring status and violation feedback
+- Responsive UI with reusable components
 
-  Run `npm i` to install the dependencies.
+## Development
 
-  Run `npm run dev` to start the development server.
-  
+```bash
+npm install
+npm run dev
+```
+
+The API base URL is configured with `VITE_API_BASE_URL`.
+
+## Production build
+
+```bash
+npm run build
+```
+
+The generated `dist/` directory is deployment output and is intentionally ignored by Git.
