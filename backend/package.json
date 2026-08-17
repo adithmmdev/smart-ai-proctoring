@@ -1,17 +1,17 @@
 {
-  "name": "backend",
+  "name": "smart-ai-proctoring-backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "create-users": "node scripts/createTestUser.js"
+    "test": "node --test",
+    "lint": "node --check app.js && node --check config/db.js && node --check middleware/authMiddleware.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "Express API for the Smart AI Proctoring System",
   "dependencies": {
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
