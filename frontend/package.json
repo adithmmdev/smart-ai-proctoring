@@ -1,6 +1,6 @@
 {
   "name": "smart-ai-proctoring-frontend",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@mediapipe/camera_utils": "^0.3.1675466862",
