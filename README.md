@@ -1,233 +1,226 @@
 # Smart AI Proctoring System
 
-A full-stack MERN application for AI-powered exam proctoring with real-time monitoring, face detection, and automated violation tracking.
+A full-stack exam platform that combines **React + TypeScript**, **Node.js + Express**, **MongoDB**, JWT authentication, and browser-side computer-vision tooling to support secure online examinations and automated proctoring signals.
 
-## 🚀 Deployment Guide
+> Portfolio focus: full-stack engineering, authentication/authorization, browser computer vision, event-driven proctoring logs, and deployment.
 
-This project is configured for free deployment using:
-- **Vercel** - React Frontend
-- **Render** - Node.js/Express Backend  
-- **MongoDB Atlas** - Database
+## What the system does
 
----
+### Student workflow
+- Register and authenticate
+- View available exams
+- Take timed examinations
+- Submit answers
+- Receive proctoring feedback and violation handling
 
-## 📋 Prerequisites
+### Administrator workflow
+- Manage exams and questions
+- Monitor student activity
+- Review submissions
+- Inspect proctoring logs and suspicious events
+- View exam-level statistics
 
-- GitHub account
-- Vercel account (free tier)
-- Render account (free tier)
-- MongoDB Atlas account (free tier)
+### Proctoring layer
+The frontend uses browser-side MediaPipe/TensorFlow tooling for face-related signals. Detected events are sent to the Express API and stored as structured proctoring logs.
 
----
+Current signals represented by the application include:
 
-## 🗄️ Step 1: Setup MongoDB Atlas
+- Face missing
+- Multiple faces
+- Tab/window switching
+- Head/gaze direction events
+- Other configurable warning/error flags
 
-1. Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
-2. Create a free account and cluster
-3. Create a database user:
-   - Go to **Database Access** → **Add New Database User**
-   - Set username and password (save these!)
-4. Whitelist your IP:
-   - Go to **Network Access** → **Add IP Address**
-   - Click **Allow Access from Anywhere** (for production) or add specific IPs
-5. Get your connection string:
-   - Go to **Database** → **Connect** → **Connect your application**
-   - Copy the connection string (looks like: `mongodb+srv://username:password@cluster.mongodb.net/database-name?retryWrites=true&w=majority`)
-   - Replace `<password>` with your database user password
-   - Replace `<database-name>` with your database name
+The backend can automatically submit an exam when the configured violation threshold is exceeded.
 
----
+## Architecture
 
-## 🖥️ Step 2: Deploy Backend on Render
-
-1. **Push your code to GitHub** (if not already done)
-   ```bash
-   git add .
-   git commit -m "Prepare for deployment"
-   git push origin main
-   ```
-
-2. **Go to Render Dashboard**
-   - Visit [render.com](https://render.com)
-   - Sign up/login with GitHub
-
-3. **Create New Web Service**
-   - Click **New +** → **Web Service**
-   - Connect your GitHub repository
-   - Select the repository
-
-4. **Configure Backend Service**
-   - **Name**: `proctoring-backend` (or any name)
-   - **Region**: `Oregon` (or closest to you)
-   - **Branch**: `main` (or your default branch)
-   - **Root Directory**: `backend`
-   - **Environment**: `Node`
-   - **Build Command**: `npm install`
-   - **Start Command**: `node app.js`
-
-5. **Set Environment Variables** (in Render dashboard):
-   ```
-   MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/database-name?retryWrites=true&w=majority
-   JWT_SECRET=your-super-secret-jwt-key-here-minimum-32-characters
-   FRONTEND_URL=https://your-frontend-url.vercel.app
-   PORT=3000
-   ```
-   - Use the MongoDB connection string from Step 1
-   - Generate a strong JWT_SECRET (use `openssl rand -hex 32` or similar)
-   - **Leave FRONTEND_URL blank for now** - you'll update it after deploying frontend
-
-6. **Deploy**
-   - Click **Create Web Service**
-   - Wait for deployment to complete (usually 2-5 minutes)
-   - Copy your backend URL (e.g., `https://proctoring-backend.onrender.com`)
-
-7. **Test Backend**
-   - Visit `https://your-backend-url.onrender.com/` in browser
-   - Should see: "Backend running."
-
----
-
-## 🌐 Step 3: Deploy Frontend on Vercel
-
-1. **Go to Vercel Dashboard**
-   - Visit [vercel.com](https://vercel.com)
-   - Sign up/login with GitHub
-
-2. **Import Project**
-   - Click **Add New...** → **Project**
-   - Import your GitHub repository
-   - Select the repository
-
-3. **Configure Frontend**
-   - **Framework Preset**: Vite
-   - **Root Directory**: `frontend`
-   - **Build Command**: `npm run build`
-   - **Output Directory**: `dist`
-
-4. **Set Environment Variables** (in Vercel dashboard):
-   ```
-   VITE_API_BASE_URL=https://your-render-backend-url.onrender.com
-   ```
-   - Use the Render backend URL from Step 2
-
-5. **Deploy**
-   - Click **Deploy**
-   - Wait for deployment to complete (usually 1-3 minutes)
-   - Copy your frontend URL (e.g., `https://your-app.vercel.app`)
-
-6. **Update Backend CORS**
-   - Go back to Render dashboard
-   - Update the `FRONTEND_URL` environment variable with your Vercel URL
-   - Render will automatically redeploy
-
----
-
-## ✅ Step 4: Verify Deployment
-
-1. **Test Backend Health**
-   - Visit: `https://your-backend-url.onrender.com/`
-   - Should see: "Backend running."
-
-2. **Test Frontend**
-   - Visit your Vercel URL
-   - Try logging in (you may need to create users first)
-
-3. **Check API Calls**
-   - Open browser DevTools → Network tab
-   - All API calls should go to your Render backend URL
-   - Should see successful responses (200 status)
-
----
-
-## 🔧 Local Development Setup
-
-### Backend
-```bash
-cd backend
-npm install
-# Copy .env.example to config/config.env and fill in values
-npm run dev  # Uses nodemon for auto-reload
+```text
+┌─────────────────────────────┐
+│ React + TypeScript Frontend │
+│                             │
+│ Exam UI / Dashboards        │
+│ MediaPipe / TensorFlow      │
+└──────────────┬──────────────┘
+               │ HTTPS / REST
+               ▼
+┌─────────────────────────────┐
+│ Express API                 │
+│                             │
+│ JWT Authentication          │
+│ Role-based Authorization    │
+│ Exam / Submission APIs      │
+│ Proctoring APIs             │
+└──────────────┬──────────────┘
+               │ Mongoose
+               ▼
+┌─────────────────────────────┐
+│ MongoDB                     │
+│                             │
+│ Users / Exams / Submissions │
+│ Proctoring Logs             │
+└─────────────────────────────┘
 ```
 
-### Frontend
-```bash
-cd frontend
-npm install
-# Copy .env.example to .env and fill in values
-npm run dev  # Starts Vite dev server
-```
+## Repository structure
 
----
-
-## 📝 Environment Variables Summary
-
-### Backend (Render)
-- `MONGO_URI` - MongoDB Atlas connection string
-- `JWT_SECRET` - Secret key for JWT tokens
-- `FRONTEND_URL` - Vercel frontend URL (for CORS)
-- `PORT` - Server port (default: 3000)
-
-### Frontend (Vercel)
-- `VITE_API_BASE_URL` - Render backend URL
-
----
-
-## 🐛 Troubleshooting
-
-### Backend Issues
-- **Database connection fails**: Check MONGO_URI format and network access in MongoDB Atlas
-- **CORS errors**: Verify FRONTEND_URL matches your Vercel URL exactly
-- **Build fails**: Check that `startCommand` is `node app.js` (not `nodemon`)
-
-### Frontend Issues
-- **API calls fail**: Verify VITE_API_BASE_URL is set correctly in Vercel
-- **Build fails**: Check that all dependencies are in package.json
-- **404 errors**: Ensure vercel.json routes are configured correctly
-
-### Common Solutions
-- Clear browser cache
-- Check environment variables are set correctly
-- Verify URLs don't have trailing slashes
-- Check Render/Vercel deployment logs for errors
-
----
-
-## 📁 Project Structure
-
-```
+```text
+smart-ai-proctoring/
 ├── backend/
-│   ├── app.js              # Main server file
-│   ├── config/
-│   │   ├── db.js           # MongoDB connection
-│   │   └── config.env      # Environment variables
-│   ├── controllers/        # Route controllers
-│   ├── models/             # MongoDB models
-│   ├── routes/             # API routes
-│   ├── render.yaml         # Render deployment config
+│   ├── config/              # Database configuration
+│   ├── controllers/         # API/business logic
+│   ├── middleware/          # JWT + role authorization
+│   ├── models/              # Mongoose schemas
+│   ├── routes/              # REST endpoints
+│   ├── app.js               # Express application
+│   ├── render.yaml          # Render deployment configuration
 │   └── package.json
+│
 ├── frontend/
 │   ├── src/
-│   │   ├── config.ts       # API configuration
-│   │   ├── App.tsx         # Main app component
-│   │   └── components/      # React components
-│   ├── vercel.json         # Vercel deployment config
+│   │   ├── components/      # Dashboards, proctoring UI, reusable UI
+│   │   ├── config.ts        # API URL configuration
+│   │   └── App.tsx
+│   ├── public/
+│   ├── vite.config.ts
 │   └── package.json
+│
 └── README.md
 ```
 
----
+## Security and engineering decisions
 
-## 📚 Additional Resources
+### Authentication
+Users authenticate through the Express API. Passwords are hashed with `bcrypt`, while authenticated requests use JWT bearer tokens.
 
-- [Render Documentation](https://render.com/docs)
-- [Vercel Documentation](https://vercel.com/docs)
-- [MongoDB Atlas Documentation](https://docs.atlas.mongodb.com/)
+### Authorization
+Protected routes use middleware to resolve the authenticated user. Administrator-only endpoints additionally enforce the `admin` role.
 
----
+### CORS
+Allowed frontend origins are configured through `FRONTEND_URL` instead of being hard-coded into the backend.
 
-## 🎉 Success!
+### Secrets
+Database credentials and JWT secrets belong in environment configuration and are intentionally excluded from Git. Use `backend/config/config.env.example` as the local configuration template.
 
-Your Smart AI Proctoring System should now be live and accessible at your Vercel URL!
+### Payload limits
+JSON payload limits are explicitly bounded because the application can transmit camera/proctoring data. Production deployments should additionally use object storage or multipart uploads for large media rather than treating large base64 payloads as the default long-term architecture.
 
-**Note**: Free tiers on Render may spin down after inactivity. The first request after inactivity may take 30-60 seconds to wake up the service.
+## API surface
 
+The backend exposes versioned REST routes under `/api/v1/`, including:
+
+| Area | Example capability |
+|---|---|
+| Auth | Register, login, current user |
+| Exams | Create/manage exams and questions |
+| Submissions | Submit and review answers |
+| Proctoring | Store flags, snapshots, and retrieve logs |
+| Reports | Exam/report data |
+| Students | Student-specific operations |
+| Admin | Administrative operations and statistics |
+
+A lightweight health endpoint is available at:
+
+```text
+GET /health
+```
+
+Expected response:
+
+```json
+{"status":"ok"}
+```
+
+## Local development
+
+### 1. Backend
+
+```bash
+cd backend
+npm install
+```
+
+Create your local configuration from the example:
+
+```text
+config/config.env.example → config/config.env
+```
+
+Then start the API:
+
+```bash
+npm run dev
+```
+
+### 2. Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Set `VITE_API_BASE_URL` when the frontend needs to target a non-default backend.
+
+### 3. Validation
+
+Backend syntax checks:
+
+```bash
+cd backend
+npm run lint
+```
+
+Backend tests:
+
+```bash
+npm test
+```
+
+## Deployment
+
+The repository contains a Render service definition for the backend. The frontend can be deployed as a Vite application on a static hosting platform.
+
+Production configuration should provide:
+
+```text
+MONGO_URI
+JWT_SECRET
+FRONTEND_URL
+PORT
+NODE_ENV
+```
+
+Do not commit real credentials, database URLs containing passwords, or test-user passwords.
+
+## Current limitations
+
+- Proctoring decisions are based on client-side signals and should be treated as **decision support**, not definitive proof of academic misconduct.
+- Large camera payloads are currently handled through API requests; a production-scale version should move media to object storage.
+- The project does not currently claim a benchmarked computer-vision accuracy metric; future work should evaluate false-positive/false-negative rates on a labeled dataset.
+- Automated exam submission is threshold-based and should be made configurable and auditable in a production deployment.
+
+## Future engineering roadmap
+
+- Add automated API integration tests
+- Add frontend component tests
+- Add CI for frontend build + backend validation
+- Move large media to object storage
+- Add rate limiting and request validation
+- Add structured logging and observability
+- Add an auditable proctoring-event model with confidence and source metadata
+- Evaluate proctoring signals against a labeled validation dataset
+
+## Tech stack
+
+**Frontend:** React, TypeScript, Vite, Tailwind-style UI components, MediaPipe, TensorFlow.js
+
+**Backend:** Node.js, Express, JWT, bcrypt, Mongoose
+
+**Database:** MongoDB
+
+**Deployment:** Vercel/Netlify-compatible frontend build + Render backend configuration
+
+## Why this project matters
+
+This project demonstrates more than a UI: it combines authentication, authorization, database modeling, REST API design, browser computer vision, event logging, automated decision rules, and deployment concerns in one end-to-end system.
